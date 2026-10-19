@@ -18,7 +18,7 @@ En esta cartera, el enfoque estandarizado **subestimaría** el riesgo real. Esta
 
 ## Datos
 
-- Dataset de créditos personales (`credito.csv`): 1.190 filas y 26 columnas, con variable objetivo `moroso` (22,6% de mora en el total). Se carga directamente desde un repositorio público de datasets de la diplomatura.
+- Dataset de créditos personales (`credito.csv`): 1.190 filas y 26 columnas, con variable objetivo `moroso` (22,6% de mora en el total). Se carga directamente desde un [repositorio público de datasets de la diplomatura](https://raw.githubusercontent.com/palasatenea66/DATASETS/main/credito.csv).
 - **Alcance del análisis:** se excluyó el producto `DS_REFINANCIACION`, quedando **831 créditos** (mora 31,3%). Split estratificado 75/25: 623 para entrenamiento y 208 para prueba.
 - **Tratamiento:** el valor centinela −1 del nivel socioeconómico (exclusivo de refinanciación) se separó de la escala real; el único nulo de consultas se imputó con la mediana.
 - **Control de data leakage:** se excluyeron `dias_atraso` y `canti_moras`, variables que ya reflejan el incumplimiento, además de los identificadores.
@@ -67,10 +67,10 @@ Validación del motor: la EL simulada coincide con la teórica (diferencia de 0,
 | Capital económico | $82,4 M |
 | Capital regulatorio | $30,0 M |
 | Costo de oportunidad anual (17%) | $14,0 M vs. $5,1 M (diferencia: $8,9 M) |
-| Rechazar el 10% de mayor riesgo | Ahorro neto de **−$10,5 M** (no conviene con una tasa del 65%) |
+| Rechazar el 10% de mayor riesgo | Ahorro neto de **+$1,2 M** con costo de fondeo del 35% (cambia de signo por debajo de ~31,5%) |
 | *Re-pricing* por riesgo | 69 de 831 créditos (8,3%) están sub-pricéados; ingreso adicional estimado de **$1,18 M** anuales |
 
-**Conclusión de negocio:** el valor del modelo está más en **cobrar según el riesgo** que en rechazar clientes.
+**Conclusión de negocio:** rechazar al 10% de mayor riesgo apenas conviene y es sensible al costo de fondeo; el *re-pricing* por riesgo no depende de ese supuesto y mejora el ingreso sin rechazar clientes.
 
 ### Sensibilidad del capital económico (cartera de $500 M)
 
@@ -85,17 +85,18 @@ Estimación puntual: $82,4 M. Rango bajo supuestos alternativos plausibles: **$3
 
 - **Muestra chica** (623 para entrenar, 208 para probar): los intervalos de confianza son amplios y el AUC de entrenamiento (0,80) supera al de prueba (0,69), señal de sobreajuste moderado.
 - **Poder discriminante moderado** (Gini ≈ 0,39).
-- **Supuestos fijos, no estimados:** LGD (45%), ρ (0,15), costo de capital (17%) y tasa de interés (65%). La sensibilidad muestra que el capital económico depende mucho de LGD y ρ.
+- **Supuestos fijos, no estimados:** LGD (45%), ρ (0,15), costo de capital (17%), costo de fondeo (35%) y tasa de interés (65%). La sensibilidad muestra que el capital económico depende mucho de LGD y ρ.
+- **Costo de capital:** el 17% solo es comparable con tasas nominales altas si se interpreta como tasa real; por eso se muestra la sensibilidad a distintos niveles.
 - **EAD aproximada** con el monto otorgado.
 - **La PD se asigna a toda la cartera** con un modelo entrenado sobre el 75% de ella.
-- **El margen resignado** en la política de rechazo se calcula con la tasa bruta, sin descontar el costo de fondeo.
+- **Horizonte:** se comparan pérdida esperada y margen sobre un horizonte comparable (~1 año).
 - La **cartera escalada** a $500 M es un supuesto ilustrativo.
 
 ## Cómo reproducir
 
 ```bash
-git clone https://github.com/francononis-creator/<nombre-del-repositorio>.git
-cd <nombre-del-repositorio>
+git clone https://github.com/francononis-creator/credit-scoring-monte-carlo-basilea-irb.git
+cd credit-scoring-monte-carlo-basilea-irb
 pip install pandas numpy scipy scikit-learn statsmodels xgboost matplotlib seaborn joblib jupyter
 jupyter notebook
 ```
