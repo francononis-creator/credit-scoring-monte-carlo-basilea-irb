@@ -6,7 +6,7 @@ Modelo de **scoring crediticio interno** y **simulación de capital económico**
 
 ## Resumen de resultados
 
-| | |
+| Concepto | Resultado |
 |---|---|
 | Cartera analizada | 831 créditos (tras excluir refinanciaciones), mora observada 31,3% |
 | Modelo base | Regresión logística WOE/IV de 4 variables, AUC test **0,694** · Gini 0,388 · KS 0,375 |
@@ -109,5 +109,4 @@ Python · pandas · NumPy · SciPy · scikit-learn · statsmodels · XGBoost · 
 
 ## Autor
 
-**Franco Nonis** · Data Scientist
-[LinkedIn](https://www.linkedin.com/in/franco-nonis-2821543a9/) · francononis14@gmail.com
+**Franco Nonis** · Data Scientist · [LinkedIn](https://www.linkedin.com/in/franco-nonis-2821543a9/) · francononis14@gmail.com
